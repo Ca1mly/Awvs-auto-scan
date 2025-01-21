@@ -80,14 +80,12 @@ func main() {
 
 	// 使用更大的容器来显示日志
 	logScroll := container.NewScroll(logText)
-	logScroll.Resize(fyne.NewSize(780, 300))
+	logScroll.SetMinSize(fyne.NewSize(780, 300)) // 设置最小大小
 
 	// 创建一个固定大小的容器来包装滚动区域
-	logContainer := container.NewPadded(
-		container.NewVBox(
-			widget.NewLabel("运行日志："),
-			container.NewPadded(logScroll),
-		),
+	logContainer := container.NewVBox(
+		widget.NewLabel("运行日志："),
+		logScroll,
 	)
 
 	// 更新日志显示的函数
@@ -316,22 +314,22 @@ func main() {
 	})
 
 	// 创建免责声明
-	// disclaimer := widget.NewLabel("免责声明：本工具仅用于安全自查，请勿用于非法测试")
-	// disclaimer.TextStyle = fyne.TextStyle{Italic: true}
-	// disclaimer.Alignment = fyne.TextAlignCenter
+	disclaimer := widget.NewLabel("免责声明：本工具仅用于安全自查，请勿用于非法测试")
+	disclaimer.TextStyle = fyne.TextStyle{Italic: true}
+	disclaimer.Alignment = fyne.TextAlignCenter
 
 	// 创建免责声明容器
-	// disclaimerContainer := container.NewHBox(
-	// 	layout.NewSpacer(),
-	// 	container.NewWithoutLayout(
-	// 		container.NewHBox(
-	// 			widget.NewLabel("—"),
-	// 			disclaimer,
-	// 			widget.NewLabel("—"),
-	// 		),
-	// 	),
-	// 	layout.NewSpacer(),
-	// )
+	disclaimerContainer := container.NewHBox(
+		layout.NewSpacer(),
+		container.NewWithoutLayout(
+			container.NewHBox(
+				widget.NewLabel("—"),
+				disclaimer,
+				widget.NewLabel("—"),
+			),
+		),
+		layout.NewSpacer(),
+	)
 
 	// 然后再创建布局
 	content := container.NewVBox(
@@ -348,7 +346,7 @@ func main() {
 		btnScanExisting,
 		logContainer, // 使用 logContainer 替代之前的日志相关组件
 		layout.NewSpacer(),
-		// disclaimerContainer,
+		disclaimerContainer,
 	)
 
 	// 设置窗口最小大小以确保内容显示完整
