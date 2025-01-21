@@ -382,11 +382,11 @@ func showConfigDialog(parent fyne.Window) {
 	apiURLEntry.SetPlaceHolder("https://your-awvs-host:3443")
 
 	apiKeyEntry := widget.NewEntry()
-	apiKeyEntry.SetPlaceHolder("1986ad8c0a5b3df4d7028d5f3c06e936")
+	apiKeyEntry.SetPlaceHolder("apikey")
 
-	// 代理设置
+	// 代理设置 - 用于 AWVS 扫描时的流量代理
 	proxyURLEntry := widget.NewEntry()
-	proxyURLEntry.SetPlaceHolder("http://127.0.0.1:8080")
+	proxyURLEntry.SetPlaceHolder("http://127.0.0.1:8080") // 用于配置 AWVS 的扫描代理
 
 	// 线程数设置
 	threadNumEntry := widget.NewEntry()
