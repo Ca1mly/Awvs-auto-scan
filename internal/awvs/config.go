@@ -3,7 +3,8 @@ package awvs
 type Config struct {
 	APIURL     string `json:"api_url"`
 	APIKey     string `json:"api_key"`
-	ProxyURL   string `json:"proxy_url,omitempty"`   // 代理地址
+	ProxyIP    string `json:"ip,omitempty"`
+	ProxyPort  string `json:"port,omitempty"`        // 代理地址
 	ThreadNum  int    `json:"thread_num,omitempty"`  // 线程数量
 	ScanSpeed  string `json:"scan_speed,omitempty"`  // 扫描速度
 	ReportType string `json:"report_type,omitempty"` // 报告类型
@@ -48,6 +49,12 @@ var SpeedOptions = []string{
 	"moderate",   // 中等
 	"fast",       // 快速
 }
+
+// 代理配置
+// var ProxyOptions = []string{
+// 	address: "",
+// 	port:    "",
+// }
 
 // 报告类型选项
 var ReportTypes = []string{

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 )
 
 type Client struct {
@@ -24,11 +23,7 @@ func NewClient(config Config) *Client {
 	}
 
 	// 如果配置了代理
-	if config.ProxyURL != "" {
-		if proxyURL, err := url.Parse(config.ProxyURL); err == nil {
-			tr.Proxy = http.ProxyURL(proxyURL)
-		}
-	}
+	// No proxy configuration needed here as it should be part of the AWVS scan configuration
 
 	return &Client{
 		config: config,
@@ -69,6 +64,10 @@ func (c *Client) StartScan(targetID, scanType string) error {
 		},
 		"scan_speed":              c.config.ScanSpeed,
 		"user_authorized_to_scan": "yes",
+		"proxy": map[string]interface{}{
+			"address": c.config.ProxyIP,
+			"port":    c.config.ProxyPort,
+		},
 	}
 
 	// 打印完整的请求负载

@@ -383,9 +383,11 @@ func showConfigDialog(parent fyne.Window) {
 	apiKeyEntry.SetPlaceHolder("apikey")
 
 	// 代理设置 - 用于 AWVS 扫描时的流量代理
-	proxyURLEntry := widget.NewEntry()
-	proxyURLEntry.SetPlaceHolder("http://127.0.0.1:8080") // 用于配置 AWVS 的扫描代理
-
+	// 代理开关
+	proxyIPEntry := widget.NewEntry()
+	proxyIPEntry.SetPlaceHolder("127.0.0.1") // 用于配置 AWVS 的扫描代理
+	proxyPORTEntry := widget.NewEntry()
+	proxyPORTEntry.SetPlaceHolder("8080")
 	// 线程数设置
 	threadNumEntry := widget.NewEntry()
 	threadNumEntry.SetPlaceHolder("10")
@@ -402,8 +404,9 @@ func showConfigDialog(parent fyne.Window) {
 	if config, err := loadConfig(); err == nil {
 		apiURLEntry.SetText(config.APIURL)
 		apiKeyEntry.SetText(config.APIKey)
-		if config.ProxyURL != "" {
-			proxyURLEntry.SetText(config.ProxyURL)
+		if config.ProxyIP != "" {
+			proxyIPEntry.SetText(config.ProxyIP)
+			proxyPORTEntry.SetText(config.ProxyPort)
 		}
 		if config.ThreadNum > 0 {
 			threadNumEntry.SetText(fmt.Sprintf("%d", config.ThreadNum))
@@ -425,7 +428,8 @@ func showConfigDialog(parent fyne.Window) {
 		Items: []*widget.FormItem{
 			{Text: "API URL", Widget: apiURLEntry},
 			{Text: "API Key", Widget: apiKeyEntry},
-			{Text: "代理地址", Widget: proxyURLEntry},
+			{Text: "代理地址", Widget: proxyIPEntry},
+			{Text: "代理端口", Widget: proxyPORTEntry},
 			{Text: "线程数量", Widget: threadNumEntry},
 			{Text: "扫描速度", Widget: speedSelect},
 			{Text: "报告类型", Widget: reportSelect},
@@ -440,7 +444,8 @@ func showConfigDialog(parent fyne.Window) {
 			config := awvs.Config{
 				APIURL:     apiURLEntry.Text,
 				APIKey:     apiKeyEntry.Text,
-				ProxyURL:   proxyURLEntry.Text,
+				ProxyIP:    proxyIPEntry.Text,
+				ProxyPort:  proxyPORTEntry.Text,
 				ThreadNum:  threadNum,
 				ScanSpeed:  speedSelect.Selected,
 				ReportType: reportSelect.Selected,
