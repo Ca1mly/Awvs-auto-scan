@@ -1,13 +1,14 @@
 package awvs
 
 type Config struct {
-	APIURL     string `json:"api_url"`
-	APIKey     string `json:"api_key"`
-	ProxyIP    string `json:"ip,omitempty"`
-	ProxyPort  string `json:"port,omitempty"`        // 代理地址
-	ThreadNum  int    `json:"thread_num,omitempty"`  // 线程数量
-	ScanSpeed  string `json:"scan_speed,omitempty"`  // 扫描速度
-	ReportType string `json:"report_type,omitempty"` // 报告类型
+	APIURL       string `json:"api_url"`
+	APIKey       string `json:"api_key"`
+	ProxyEnabled string `json:"proxy_enabled,omitempty"` // 代理开关
+	ProxyIP      string `json:"ip,omitempty"`
+	ProxyPort    string `json:"port,omitempty"`        // 代理地址
+	ThreadNum    int    `json:"thread_num,omitempty"`  // 线程数量
+	ScanSpeed    string `json:"scan_speed,omitempty"`  // 扫描速度
+	ReportType   string `json:"report_type,omitempty"` // 报告类型
 }
 
 // 扫描配置ID映射
@@ -50,11 +51,11 @@ var SpeedOptions = []string{
 	"fast",       // 快速
 }
 
-// 代理配置
-// var ProxyOptions = []string{
-// 	address: "",
-// 	port:    "",
-// }
+// ProxyEnabled
+var ProxyEnabled = []string{
+	"False", // false
+	"True",  // true
+}
 
 // 报告类型选项
 var ReportTypes = []string{

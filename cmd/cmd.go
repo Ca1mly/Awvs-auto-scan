@@ -384,6 +384,8 @@ func showConfigDialog(parent fyne.Window) {
 
 	// 代理设置 - 用于 AWVS 扫描时的流量代理
 	// 代理开关
+	ProxyEnabled := widget.NewSelect(awvs.ProxyEnabled, nil)
+	ProxyEnabled.SetSelected("False")
 	proxyIPEntry := widget.NewEntry()
 	proxyIPEntry.SetPlaceHolder("127.0.0.1") // 用于配置 AWVS 的扫描代理
 	proxyPORTEntry := widget.NewEntry()
@@ -404,7 +406,8 @@ func showConfigDialog(parent fyne.Window) {
 	if config, err := loadConfig(); err == nil {
 		apiURLEntry.SetText(config.APIURL)
 		apiKeyEntry.SetText(config.APIKey)
-		if config.ProxyIP != "" {
+		if config.ProxyEnabled != "False" {
+			ProxyEnabled.SetSelected(config.ProxyEnabled)
 			proxyIPEntry.SetText(config.ProxyIP)
 			proxyPORTEntry.SetText(config.ProxyPort)
 		}
@@ -428,6 +431,7 @@ func showConfigDialog(parent fyne.Window) {
 		Items: []*widget.FormItem{
 			{Text: "API URL", Widget: apiURLEntry},
 			{Text: "API Key", Widget: apiKeyEntry},
+			{Text: "代理开关", Widget: ProxyEnabled},
 			{Text: "代理地址", Widget: proxyIPEntry},
 			{Text: "代理端口", Widget: proxyPORTEntry},
 			{Text: "线程数量", Widget: threadNumEntry},

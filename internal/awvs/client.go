@@ -54,6 +54,7 @@ func (c *Client) StartScan(targetID, scanType string) error {
 	// 添加日志输出来调试
 	fmt.Printf("使用扫描类型: %s\n", scanType)
 
+	// 构建请求负载
 	payload := map[string]interface{}{
 		"target_id":  targetID,
 		"profile_id": scanType,
@@ -65,23 +66,45 @@ func (c *Client) StartScan(targetID, scanType string) error {
 		"scan_speed":              c.config.ScanSpeed,
 		"user_authorized_to_scan": "yes",
 		"proxy": map[string]interface{}{
-			"address": c.config.ProxyIP,
-			"port":    c.config.ProxyPort,
+			"enabled":  c.config.ProxyEnabled,
+			"protocol": "http",
+			"address":  c.config.ProxyIP,
+			"port":     c.config.ProxyPort,
 		},
+		"user_agent":     "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)",
+		"case_sensitive": "auto",
+		"authentication": map[string]interface{}{
+			"enabled": false,
+		},
+		"technologies":                []string{},
+		"debug":                       false,
+		"client_certificate_password": "",
+		"issue_tracker_id":            "",
+		"excluded_hours_id":           "",
 	}
 
 	// 打印完整的请求负载
 	jsonData, _ := json.MarshalIndent(payload, "", "  ")
 	fmt.Printf("请求负载: %s\n", string(jsonData))
 
-	// 使用正确的路径
-	resp, err := c.post("/api/v1/scans", payload)
+	// 发送请求
+	url := fmt.Sprintf("%s/api/v1/targets/%s/configuration", c.config.APIURL, targetID)
+	req, err := http.NewRequest("PATCH", url, bytes.NewBuffer(jsonData))
 	if err != nil {
-		// 打印详细的错误信息
-		if resp != "" {
-			return fmt.Errorf("启动扫描失败: %v (响应: %s)", err, resp)
-		}
-		return fmt.Errorf("启动扫描失败: %v", err)
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+c.config.APIKey)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("请求失败，状态码: %d", resp.StatusCode)
 	}
 
 	return nil
